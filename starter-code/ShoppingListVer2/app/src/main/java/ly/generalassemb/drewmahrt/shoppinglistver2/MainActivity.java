@@ -70,9 +70,10 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
         mCursor = db.query("grocery_list", null, null, null, null, null, null, null);
+
         mGroceryList = (ListView) findViewById(R.id.shopping_list_view);
 
-        CursorAdapter mCursorAdapter = new CursorAdapter(MainActivity.this, mCursor, 0) {
+        CursorAdapter mCursorAdapter = new CursorAdapter(MainActivity.this,mCursor,0) {
             @Override
             public View newView(Context context, Cursor cursor, ViewGroup parent) {
                 return LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1,
@@ -81,8 +82,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void bindView(View view, Context context, Cursor cursor) {
-                TextView txt = (TextView) view.findViewById(android.R.id.text1);
-                String rowData = cursor.getString(cursor.getColumnIndex("name"));
+                TextView txt = (TextView)view.findViewById(android.R.id.text1);
+                //String rowData = cursor.getString(1);
+                // Found my error.  Once I capitalized the column, "name" to "NAME", it worked.
+                String rowData = cursor.getString(cursor.getColumnIndex("NAME"));
                 txt.setText(rowData);
             }
         };
@@ -92,10 +95,11 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mDetailIntent = new Intent(MainActivity.this, GroceryDetailActivity.class);
 
-                String name = mCursor.getString(mCursor.getColumnIndex("name"));
-                String description = mCursor.getString(mCursor.getColumnIndex("description"));
-                String price = mCursor.getString(mCursor.getColumnIndex("price"));
-                String type = mCursor.getString(mCursor.getColumnIndex("type"));
+                // I had to capitalize the column names from the grocery_list table.
+                String name = mCursor.getString(mCursor.getColumnIndex("NAME"));
+                String description = mCursor.getString(mCursor.getColumnIndex("DESCRIPTION"));
+                String price = mCursor.getString(mCursor.getColumnIndex("PRICE"));
+                String type = mCursor.getString(mCursor.getColumnIndex("TYPE"));
                 mDetailIntent.putExtra("NAME", name);
                 mDetailIntent.putExtra("DESCRIPTION", description);
                 mDetailIntent.putExtra("PRICE", price);
